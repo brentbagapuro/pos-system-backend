@@ -1,0 +1,30 @@
+version: '3.9'
+
+volumes:
+  db-data:
+
+services:
+  pos-db:
+    image: postgres:13.1-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: pos
+    ports:
+      - '5432:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      # - ./database-initialization:/docker-entrypoint-init.d/
+
+  pos-pgadmin:
+    image: dpage/pgadmin4
+    logging:
+      driver: none
+    environment:
+      PGADMIN_DEFAULT_EMAIL: brentbagapuro@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: 40
+    ports:
+      - '3334:80'
+    volumes:
+      - ./pgadmin-config.json:/pgadmin4/servers.json
